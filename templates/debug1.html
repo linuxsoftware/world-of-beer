@@ -1,0 +1,47 @@
+<%inherit file="worldofbeer.html" />
+
+<%def name="topMenu()">
+  <div class="topMenu">
+    Hello World .::.
+    <a class="mapLink" href="index.html" title="Explore">Map</a> |
+    <a class="beersLink" href="beers.html" title="Try some beers">Beers</a> |
+    <a class="barmaidLink" href="#" >Barmaid</a> |
+    <a class="logoutLink" href="logout" title="Stagger out">Logout</a>
+  </div>
+</%def>
+
+${url}
+##${debug('RequestHandler members', reqvars)}
+${debugData('Country data', country)}
+${debugData('Brewery data', brewery)}
+##${debug('Request headers', reqvars['request']._headers)}
+##${debug('Request environ', reqvars['request']._environ)}
+${debug('Request POST', reqvars['request'].POST)}
+##${debug('Response members', reqvars['response'].__dict__)}
+${debug('Context', context._data)}
+
+<%def name="debug(name, vars)">
+  <p>
+    <h3>${name}</h3>
+    <table>
+    %for k,v in vars.items():
+    <tr>
+      <td>${k} </td><td><strong>=</strong></td><td>'${str(v)}'</td>
+    </tr>
+    %endfor
+    <table>
+  </p>
+</%def>
+
+<%def name="debugData(name, data)">
+  <p>
+    <h3>${name}</h3>
+    <table>
+    %for k in data.properties() if data else []:
+    <tr>
+      <td>${k} </td><td><strong>=</strong></td><td>'${getattr(data, k, '')}'</td>
+    </tr>
+    %endfor
+    <table>
+  </p>
+</%def>

@@ -1,0 +1,32 @@
+<%inherit file="worldofbeer.html" />
+<h1>${country.name}</h1>
+
+%if form.errors:
+    <ul class="errors">
+        %for field_name, field_errors in form.errors.items():
+            %for error in field_errors:
+                <li>${form[field_name].label}: ${error}</li>
+            %endfor
+        %endfor
+    </ul>
+%endif
+
+<form method="POST" action="${url}">
+  <div>${form.name.label}: ${form.name()}</div>
+  <div>${form.flag.label}: ${form.flag}</div>
+  <div>${form.description.label}: ${form.description}</div>
+  <div>${form.map.label}: ${form.map}</div>
+  <div>${form.capital.label}: ${form.capital}</div>
+  <div>${form.area.label}: ${form.area}</div>
+  <div>${form.population.label}: ${form.population}</div>
+  <div>Beer consumed per Capita: ${form.perCapBeer}</div>
+  <div>Total beer consumption: ${form.totBeer}</div>
+  <div>${form.languages.label}: ${form.languages}</div>
+  <div>${form.climate.label}: ${form.climate}</div>
+  <div>${form.agriculture.label}: ${form.agriculture}</div>
+  <div>${form.industry.label}: ${form.industry}</div>
+  <div>${form.government.label}: ${form.government}</div>
+  <div>${form.borders.label}: ${form.borders}</div>
+  <input type="submit" value="OK"/>
+</form>
+

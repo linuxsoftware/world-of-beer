@@ -1,0 +1,11 @@
+application: world-of-beer
+version: 6
+runtime: python
+api_version: 1
+
+handlers:
+- url: /wob
+  static_dir: wob
+
+- url: /.*
+  script: main.py

@@ -1,0 +1,275 @@
+Beers of the World
+Add a beer
+Review a beer
+
+Pylons?
+GAE?
+djm6809@gmail.com: ruggedy1
+http://countergram.com/pylons-google-app-engine
+
+[
+  {
+    featureType: "all",
+    elementType: "all",
+    stylers: [
+      { visibility: "off" }
+    ]
+  },{
+    featureType: "administrative.country",
+    elementType: "all",
+    stylers: [
+      { visibility: "on" }
+    ]
+  },{
+    featureType: "administrative.locality",
+    elementType: "all",
+    stylers: [
+      { visibility: "on" },
+      { lightness: 30 }
+    ]
+  },{
+    featureType: "water",
+    elementType: "all",
+    stylers: [
+      { visibility: "on" },
+      { hue: "#002bff" },
+      { gamma: 0.7 },
+      { lightness: -40 }
+    ]
+  },{
+    featureType: "road.arterial",
+    elementType: "geometry",
+    stylers: [
+      { lightness: 62 },
+      { visibility: "simplified" }
+    ]
+  },{
+    featureType: "road.highway",
+    elementType: "all",
+    stylers: [
+      { lightness: 62 },
+      { visibility: "simplified" }
+    ]
+  },{
+    featureType: "landscape.natural",
+    elementType: "all",
+    stylers: [
+      { visibility: "on" }
+    ]
+  }
+]
+
+
+Afghanistan	
+Albania	
+Algeria	
+Andorra	
+Angola	
+Antigua and Barbuda	
+Argentina	
+Armenia	
+Australia	
+Austria	
+Azerbaijan	
+Bahamas	
+Bahrain	
+Bangladesh	
+Barbados	
+Belarus	
+Belgium	
+Belize	
+Benin
+Bhutan	
+Bolivia
+Bosnia and Herzegovina	
+Botswana	
+Brazil	
+Brunei Darussalam	
+Bulgaria	
+Burkina Faso
+Burundi	
+Cambodia
+Cameroon
+Canada	
+Cape Verde	
+Central African Republic
+Chad	
+Chile	
+China	
+Colombia	
+Comoros	
+Congo
+Costa Rica	
+Côte d'Ivoire
+Croatia	
+Cuba	
+Cyprus	
+Czech Republic	
+North Korea	
+Democratic Republic of the Congo
+Denmark	
+Djibouti	
+Dominica	
+Dominican Republic	
+Ecuador	
+Egypt	
+El Salvador	
+Equatorial Guinea	
+Eritrea	
+Estonia	
+Ethiopia	
+Fiji	
+Finland	
+France	
+Gabon	
+Gambia
+Georgia	
+Germany	
+Ghana	
+Greece	
+Grenada	
+Guatemala	
+Guinea	
+Guinea-Bissau	
+Guyana	
+Haiti	
+Honduras	
+Hungary	
+Iceland	
+India	
+Indonesia	
+Iran
+Iraq	
+Ireland	
+Israel	
+Italy	
+Jamaica	
+Japan	
+Jordan	
+Kazakhstan
+Kenya	
+Kiribati	
+Kuwait	
+Kyrgyzstan	
+Laos
+Latvia	
+Lebanon	
+Lesotho	
+Liberia	
+Libya
+Liechtenstein	
+Lithuania	
+Luxembourg	
+Madagascar
+Malawi	
+Malaysia
+Maldives
+Mali	
+Malta	
+Marshall Islands	
+Mauritania	
+Mauritius	
+Mexico	
+Micronesia
+Monaco	
+Mongolia	
+Montenegro	
+Morocco	
+Mozambique	
+Myanmar
+Namibia	
+Nauru	
+Nepal	
+Netherlands	
+New Zealand	
+Nicaragua	
+Niger	
+Nigeria	
+Norway	
+Oman	
+Pakistan	
+Palau	
+Panama	
+Papua New Guinea	
+Paraguay	
+Peru	
+Philippines
+Poland	
+Portugal	
+Qatar	
+South Korea	
+Moldova
+Romania	
+Russian Federation	
+Rwanda	
+Saint Kitts and Nevis
+Saint Lucia	
+Saint Vincent and the Grenadines	
+Samoa	
+San Marino	
+Sao Tome and Principe	
+Saudi Arabia	
+Senegal	
+Serbia	
+Seychelles	
+Sierra Leone	
+Singapore	
+Slovakia	
+Slovenia	
+Solomon Islands	
+Somalia	
+South Africa
+Spain	
+Sri Lanka
+Sudan	
+Suriname
+Swaziland	
+Sweden	
+Switzerland	
+Syria
+Tajikistan	
+Thailand
+Macedonia	
+Timor-Leste	
+Togo	
+Tonga	
+Trinidad and Tobago	
+Tunisia	
+Turkey	
+Turkmenistan	
+Tuvalu	
+Uganda	
+Ukraine	
+United Arab Emirates	
+United Kingdom
+Tanzania	
+United States
+Uruguay	
+Uzbekistan	
+Vanuatu	
+Venezuela
+Viet Nam	
+Yemen	
+Zambia	
+Zimbabwe	
+
+
+
+Barmaids
+
+where did build come from?
+[djm@lemonade build]$ ls
+Mako        MySQL-python  Pygments  Tempita   WebOb
+MarkupSafe  nose          pysqlite  WebError  WebTest
+
+
+
+valid urls (country is optional)
+beer.dazed.co.nz/new-zealand
+beer.dazed.co.nz/new-zealand/edit
+beer.dazed.co.nz/new-zealand/montieths
+beer.dazed.co.nz/new-zealand/montieths/original
+beer.dazed.co.nz/montieths
+beer.dazed.co.nz/montieths/original
+beer.dazed.co.nz/beers
+beer.dazed.co.nz/map

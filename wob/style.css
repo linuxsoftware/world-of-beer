@@ -1,0 +1,217 @@
+/*
+ * World of Beer style
+*/
+
+html { height: 100% }
+
+a:link, a:visited {
+    color: #D70606;
+    text-decoration: none;
+}
+a:hover, a:active {
+    color: #A00;
+    text-decoration: underline;
+}
+a img {
+    border: none;
+}
+
+h1 {
+    font: bold 32px  "New Century Schoolbook", "Liberation Serif", Georgia, serif;
+    margin: 0;
+	letter-spacing: -0.3px;
+}
+h2 {
+    font: 24px  "New Century Schoolbook", "Liberation Serif", Georgia, serif;
+    padding: 0 0 5px 0;
+    margin: 0;
+}
+h3 {
+    font: bold 16px  "New Century Schoolbook", "Liberation Serif", Georgia, serif;
+    margin: 0;
+	letter-spacing: -0.3px;
+}
+
+hr {
+    height: 1pt;
+    background-color: #9C9C9C;
+    border: 0;
+}
+
+/* custom rules ----- to ---------- */
+.hr1 {height: 2pt;}
+.hr2 {height: 3pt;}
+.hr3 {height: 4pt;}
+.hr4 {height: 5pt;}
+.hr5 {height: 6pt;}
+.hr6 {height: 7pt;}
+
+/* Replacement for deprecated html 3 <u> element and html 4 <strike> */
+.u {text-decoration: underline;}
+.strike {text-decoration: line-through;}
+
+body {
+    color: white;
+    background: #121524;
+    font-family: "Liberation Sans", Verdana, Geneva, Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+#banner {
+    background: #121524 url(/wob/banner_bottom.png) repeat-x left bottom;
+    color: white;
+    height: 40px;
+    /* position: fixed; */
+    position: relative;
+}
+
+#banner a {
+    color: white;
+}
+#banner a:hover,
+#banner a:active {
+    text-decoration: none;
+}
+
+#banner a.title {
+    font: bold 24px Georgia,serif;
+    line-height: 24px;
+    position: absolute;
+    top: 6px;
+    left: 20px;
+}
+
+#banner .topMenu {
+    font: bold 11px Georgia,serif;
+    line-height: 12px;
+    position: absolute;
+    top: 12px;
+    right: 20px;
+}
+#barmaid {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: #121524 4px 8px 10px;
+	-moz-box-shadow: #121524 4px 8px 10px;
+	box-shadow: #121524 4px 8px 10px;
+    position: absolute;
+    top: 16px;
+    right: 26px;
+    z-index: 4;
+    float: right;
+    display: none;
+}
+#barmaid a img.closeButton {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    opacity: 0.7;
+}
+#barmaid a:hover img.closeButton,
+#barmaid a:active img.closeButton {
+    opacity: 1;
+}
+#barmaid img.forSizingOnly {
+    opacity: 0;
+	vertical-align: bottom;
+}
+
+#outer {
+    background: #eaeaea;
+    color: #262626;
+    padding: 30px 50px;
+    position: relative;
+    overflow: hidden;
+}
+#content {
+    -webkit-box-shadow: #121524 2px 4px 8px;
+	-moz-box-shadow: #121524 2px 4px 8px;
+	box-shadow: #121524 2px 4px 8px;
+}
+#content.map {
+    /*background: #3d477b;*/
+    background: ##384795;
+    color: #6778cf;
+    overflow: hidden;
+    padding: 2px;
+}
+#mapCanvas { 
+    max-width:1020px;
+    height:  600px;
+    margin: 0 auto;
+}
+#content.beers {
+    background: white;
+    color: #262626;
+    padding: 16px 40px;
+}
+table.selectaBeer  {
+  width: 100%;
+}
+table.selectaBeer td {
+    vertical-align: top;
+    padding: 10px;
+}
+table.selectaBeer td.country {
+    width: 160px;
+    text-align: center;
+}
+table.selectaBeer td.country .name {
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: bold;
+	letter-spacing: 2px;
+}
+
+table.selectaBeer td.beer .name {
+    font-weight: bold;
+    font-size: 24px;
+}
+table.selectaBeer td.rating {
+    width: 240px;
+}
+#footer {
+    position: relative;
+    padding-right: 10px;
+    background: #121524;
+    border-top: 1px solid #a00000;
+    color: white;
+    height: 100px;
+}
+#footer img.button
+{
+    float: right;
+    padding-right: 10px;
+}
+#footer img.poweredByAppEngine,
+#footer img.pythonPowered
+{
+    padding-top: 10px;
+}
+#footer img.createdWithVim
+{
+    padding-top: 4px;
+}
+#footer img.penguin
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+#footer img.logo
+{
+    position: absolute;
+    bottom: 50px;
+    left: 140px;
+}
+#footer .copyright
+{
+    position: absolute;
+    bottom: 30px;
+    left: 145px;
+    font-size: 11px;
+}
+
+

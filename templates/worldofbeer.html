@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    ${self.head()}
+  </head>
+  <body>
+    ${self.banner()}
+    %if self is not local:
+      <div id="outer">
+        <div id="barmaid">
+          <img class="forSizingOnly" src="/wob/barmaid_1.jpg" />
+          <a class="closeLink" href="#">
+            <img class="closeButton" src="/wob/close.png" />
+          </a>
+        </div>
+        ${self.body()}
+      </div>
+    %else:
+      <p>Nothing to see here.  Move along.</p>
+    %endif
+    ${self.footer()}
+  </body>
+</html>
+
+<%def name="head()">
+  <title>World of Beer</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" 
+          src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+  <script type="text/javascript"
+          src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/wob/barmaid.js"></script>
+  <link rel="stylesheet" type="text/css" href="/wob/style.css" media="screen" />
+</%def>
+
+<%def name="banner()">
+  <div id="banner">
+    <a href="/" 
+      title="Rate beers from every country around the world."
+      class="title">World of Beer</a>
+    ${self.topMenu()}
+  </div>
+</%def>
+
+<%def name="topMenu()">
+  <div class="topMenu">
+    <a class="mapLink" href="/map" title="Explore">Map</a> |
+    <a class="beersLink" href="/beers" title="Try some beers">Beers</a> |
+##    <a class="barmaidLink" href="#barmaid" >Barmaid</a> |
+##    <a class="logoutLink" href="/logout" title="Stagger out">Logout</a>
+    Logout
+  </div>
+</%def>
+
+<%def name="footer()">
+  <div id="footer">
+    <a href="http://www.vim.org">
+      <img class="createdWithVim button" src="/wob/vim_created.png"
+           alt="Vim Created" /></a>
+    <a href="http://www.python.org">
+      <img class="pythonPowered button" src="/wob/python-powered.png"
+           alt="Python Powered" /></a>
+    <a href="http://code.google.com/appengine/docs/python/overview.html">
+      <img class="poweredByAppEngine button"
+           src="http://code.google.com/appengine/images/appengine-silver-120x30.gif"
+           alt="Powered by Google App Engine" /></a>
+         <a href="http://www.linuxsoftware.co.nz">
+           <img class="penguin" src="/wob/little_blue.jpg" alt="Penguin" /></a>
+         <a href="http://www.linuxsoftware.co.nz">
+           <img class="logo" src="/wob/ls_text.png" alt="LinuxSoftware" /></a>
+    <div class="copyright"> Copyright &copy; 2010-2012.
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/nz/">
+      <img align="absbottom" alt="CC BY-SA" style="border-width:0"
+           src="http://i.creativecommons.org/l/by-sa/3.0/nz/80x15.png" /></a>
+  </div>
+</%def>
+
+

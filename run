@@ -1,0 +1,2 @@
+HERE=$(dirname $0)
+$HERE/../appengine/google_appengine/dev_appserver.py $HERE

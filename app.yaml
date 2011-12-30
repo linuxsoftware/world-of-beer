@@ -1,11 +1,12 @@
-application: world-of-beer
-version: 6
-runtime: python
+application: world-of-beer2
+version: 1
+runtime: python27
 api_version: 1
+threadsafe: yes
 
 handlers:
 - url: /wob
   static_dir: wob
 
 - url: /.*
-  script: main.py
+  script: main.application

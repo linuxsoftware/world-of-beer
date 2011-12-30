@@ -1,5 +1,5 @@
-# util.py
-# Copyright (C) 2006, 2007, 2008, 2009, 2010 Michael Bayer mike_mp@zzzcomputing.com
+# mako/util.py
+# Copyright (C) 2006-2011 the Mako authors and contributors <see AUTHORS file>
 #
 # This module is part of Mako and is released under
 # the MIT License: http://www.opensource.org/licenses/mit-license.php
@@ -21,6 +21,7 @@ else:
         from StringIO import StringIO
 
 import codecs, re, weakref, os, time, operator
+import collections
 
 try:
     import threading
@@ -33,7 +34,7 @@ if win32 or jython:
     time_func = time.clock
 else:
     time_func = time.time 
-   
+ 
 def function_named(fn, name):
     """Return a function with a given __name__.
 
@@ -43,7 +44,17 @@ def function_named(fn, name):
     """
     fn.__name__ = name
     return fn
- 
+
+try:
+    from functools import partial
+except:
+    def partial(func, *args, **keywords):
+        def newfunc(*fargs, **fkeywords):
+            newkeywords = keywords.copy()
+            newkeywords.update(fkeywords)
+            return func(*(args + fargs), **newkeywords)
+        return newfunc
+
 if py24:
     def exception_name(exc):
         try:
@@ -53,12 +64,12 @@ if py24:
 else:
     def exception_name(exc):
         return exc.__class__.__name__
-    
+ 
 def verify_directory(dir):
     """create and/or verify a filesystem directory."""
-    
+ 
     tries = 0
-    
+ 
     while not os.path.exists(dir):
         try:
             tries += 1
@@ -76,14 +87,24 @@ def to_list(x, default=None):
         return x
 
 
-    
+class memoized_property(object):
+    """A read-only @property that is only evaluated once."""
+    def __init__(self, fget, doc=None):
+        self.fget = fget
+        self.__doc__ = doc or fget.__doc__
+        self.__name__ = fget.__name__
 
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        obj.__dict__[self.__name__] = result = self.fget(obj)
+        return result
 
 class SetLikeDict(dict):
     """a dictionary that has some setlike methods on it"""
     def union(self, other):
         """produce a 'union' of this dict and another (at the key level).
-        
+ 
         values in the second dict take precedence over that of the first"""
         x = SetLikeDict(**self)
         x.update(other)
@@ -91,10 +112,10 @@ class SetLikeDict(dict):
 
 class FastEncodingBuffer(object):
     """a very rudimentary buffer that is faster than StringIO, 
-    but doesnt crash on unicode data like cStringIO."""
-    
+    but doesn't crash on unicode data like cStringIO."""
+ 
     def __init__(self, encoding=None, errors='strict', unicode=False):
-        self.data = []
+        self.data = collections.deque()
         self.encoding = encoding
         if unicode:
             self.delim = u''
@@ -103,10 +124,11 @@ class FastEncodingBuffer(object):
         self.unicode = unicode
         self.errors = errors
         self.write = self.data.append
-    
+ 
     def truncate(self):
-        self.data =[]
-        
+        self.data = collections.deque()
+        self.write = self.data.append
+ 
     def getvalue(self):
         if self.encoding:
             return self.delim.join(self.data).encode(self.encoding, self.errors)
@@ -116,12 +138,12 @@ class FastEncodingBuffer(object):
 class LRUCache(dict):
     """A dictionary-like object that stores a limited number of items, discarding
     lesser used items periodically.
-    
+ 
     this is a rewrite of LRUCache from Myghty to use a periodic timestamp-based
     paradigm so that synchronization is not really needed.  the size management 
     is inexact.
     """
-    
+ 
     class _Item(object):
         def __init__(self, key, value):
             self.key = key
@@ -129,26 +151,26 @@ class LRUCache(dict):
             self.timestamp = time_func()
         def __repr__(self):
             return repr(self.value)
-    
+ 
     def __init__(self, capacity, threshold=.5):
         self.capacity = capacity
         self.threshold = threshold
-    
+ 
     def __getitem__(self, key):
         item = dict.__getitem__(self, key)
         item.timestamp = time_func()
         return item.value
-    
+ 
     def values(self):
         return [i.value for i in dict.values(self)]
-    
+ 
     def setdefault(self, key, value):
         if key in self:
             return self[key]
         else:
             self[key] = value
             return value
-    
+ 
     def __setitem__(self, key, value):
         item = dict.get(self, key)
         if item is None:
@@ -157,7 +179,7 @@ class LRUCache(dict):
         else:
             item.value = value
         self._manage_size()
-    
+ 
     def _manage_size(self):
         while len(self) > self.capacity + self.capacity * self.threshold:
             bytime = sorted(dict.values(self), 
@@ -222,14 +244,14 @@ def parse_encoding(fp):
 
 def sorted_dict_repr(d):
     """repr() a dictionary with the keys in order.
-    
+ 
     Used by the lexer unit test to compare parse trees based on strings.
-    
+ 
     """
     keys = d.keys()
     keys.sort()
     return "{" + ", ".join(["%r: %r" % (k, d[k]) for k in keys]) + "}"
-    
+ 
 def restore__ast(_ast):
     """Attempt to restore the required classes to the _ast module if it
     appears to be missing them
@@ -304,3 +326,27 @@ mako in baz not in mako""", '<unknown>', 'exec', _ast.PyCF_ONLY_AST)
 
     _ast.In = type(m.body[12].value.ops[0])
     _ast.NotIn = type(m.body[12].value.ops[1])
+
+
+try:
+    from inspect import CO_VARKEYWORDS, CO_VARARGS
+    def inspect_func_args(fn):
+        co = fn.func_code
+
+        nargs = co.co_argcount
+        names = co.co_varnames
+        args = list(names[:nargs])
+
+        varargs = None
+        if co.co_flags & CO_VARARGS:
+            varargs = co.co_varnames[nargs]
+            nargs = nargs + 1
+        varkw = None
+        if co.co_flags & CO_VARKEYWORDS:
+            varkw = co.co_varnames[nargs]
+
+        return args, varargs, varkw, fn.func_defaults
+except ImportError:
+    import inspect
+    def inspect_func_args(fn):
+        return inspect.getargspec(fn)

@@ -53,7 +53,7 @@ function WorldOfBeerMap()
 
         var wobMapOpts = { zoom: mapZoom,
                            center: mapCentre,
-                           backgroundColor: "#3d477b",
+                           backgroundColor: "#3e487b",
                            disableDoubleClickZoom: true,
                            navigationControlOptions: {
                                style: google.maps.NavigationControlStyle.DEFAULT,
@@ -80,9 +80,10 @@ function WorldOfBeerMap()
                          { featureType: "water",
                            elementType: "all",
                            stylers: [ { visibility: "on" },
-                                      { hue: "#3d477b" },
-                                      { gamma: 0.7 },
-                                      { lightness: -40 } ] },
+                                      { hue: "#3c467b" },
+                                      { lightness: -33 },
+                                      { saturation: -28 },
+                                      { gamma: 0.67 }, ] },
                          { featureType: "road.arterial",
                            elementType: "geometry",
                            stylers: [ { lightness: 62 },

@@ -1,3 +1,9 @@
+# ext/turbogears.py
+# Copyright (C) 2006-2011 the Mako authors and contributors <see AUTHORS file>
+#
+# This module is part of Mako and is released under
+# the MIT License: http://www.opensource.org/licenses/mit-license.php
+
 import re, inspect
 from mako.lookup import TemplateLookup
 from mako.template import Template
@@ -19,7 +25,7 @@ class TGPlugin(object):
             elif k in ['directories', 'filesystem_checks', 'module_directory']:
                 lookup_options[k] = v
         self.lookup = TemplateLookup(**lookup_options)
-        
+ 
         self.tmpl_options = {}
         # transfer lookup args to template args, based on those available
         # in getargspec

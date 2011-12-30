@@ -131,8 +131,7 @@ body {
 	box-shadow: #121524 2px 4px 8px;
 }
 #content.map {
-    /*background: #3d477b;*/
-    background: ##384795;
+    background: #3e487b;
     color: #6778cf;
     overflow: hidden;
     padding: 2px;

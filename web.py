@@ -4,9 +4,8 @@ import os
 from os import path
 import sys
 import time
+import webapp2
 from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from mako.lookup import Template, TemplateLookup
 from mako import exceptions
@@ -45,19 +44,19 @@ class MakoRenderer(object):
 
 
 # TODO merge Map and Beers into Main?
-class Map(webapp.RequestHandler, MakoRenderer):
+class Map(webapp2.RequestHandler, MakoRenderer):
     def get(self):
         self._renderTemplate("map.html")
 
-class Beers(webapp.RequestHandler, MakoRenderer):
+class Beers(webapp2.RequestHandler, MakoRenderer):
     def get(self):
         self._renderTemplate("beers.html")
 
-class Main(webapp.RequestHandler, MakoRenderer):
+class Main(webapp2.RequestHandler, MakoRenderer):
     """This is the main webui class for WoB"""
 
     def initialize(self, request, response):
-        webapp.RequestHandler.initialize(self, request, response)
+        webapp2.RequestHandler.initialize(self, request, response)
         self.country = None
         self.brewery = None
         self.beer    = None

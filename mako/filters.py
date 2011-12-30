@@ -1,5 +1,5 @@
-# filters.py
-# Copyright (C) 2006, 2007, 2008, 2009, 2010 Geoffrey T. Dairiki <dairiki@dairiki.org> and Michael Bayer <mike_mp@zzzcomputing.com>
+# mako/filters.py
+# Copyright (C) 2006-2011 the Mako authors and contributors <see AUTHORS file>
 #
 # This module is part of Mako and is released under
 # the MIT License: http://www.opensource.org/licenses/mit-license.php
@@ -8,29 +8,30 @@
 import re, urllib, htmlentitydefs, codecs
 from StringIO import StringIO
 from mako import util
-#import markupsafe
-import cgi
 
 xml_escapes = {
     '&' : '&amp;',
     '>' : '&gt;', 
     '<' : '&lt;', 
     '"' : '&#34;',   # also &quot; in html-only
-    "'" : '&#39;'    # also &apos; in html-only    
+    "'" : '&#39;'    # also &apos; in html-only 
 }
 
 # XXX: &quot; is valid in HTML and XML
 #      &apos; is not valid HTML, but is valid XML
 
-def html_escape(string):
-    #return markupsafe.escape(string)
-    return cgi.escape(string)
-
 def legacy_html_escape(string):
     """legacy HTML escape for non-unicode mode."""
 
     return re.sub(r'([&<"\'>])', lambda m: xml_escapes[m.group()], string)
-    
+
+try:
+    import markupsafe
+    html_escape = markupsafe.escape
+except ImportError:
+    html_escape = legacy_html_escape
+
+ 
 def xml_escape(string):
     return re.sub(r'([&<"\'>])', lambda m: xml_escapes[m.group()], string)
 
@@ -60,14 +61,14 @@ class Decode(object):
                 return unicode(x, encoding=key)
         return decode
 decode = Decode()
-        
-            
+ 
+ 
 _ASCII_re = re.compile(r'\A[\x00-\x7f]*\Z')
 
 def is_ascii_str(text):
     return isinstance(text, str) and _ASCII_re.match(text)
 
-################################################################    
+################################################################ 
 
 class XMLEntityEscaper(object):
     def __init__(self, codepoint2name, name2codepoint):
@@ -114,7 +115,7 @@ class XMLEntityEscaper(object):
                                           | ( (?!\d) [:\w] [-.:\w]+ )
                                           ) ;''',
                                  re.X | re.UNICODE)
-    
+ 
     def __unescape(self, m):
         dval, hval, name = m.groups()
         if dval:
@@ -127,7 +128,7 @@ class XMLEntityEscaper(object):
         if codepoint < 128:
             return chr(codepoint)
         return unichr(codepoint)
-    
+ 
     def unescape(self, text):
         """Unescape character references.
 

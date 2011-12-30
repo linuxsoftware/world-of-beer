@@ -1,5 +1,5 @@
-# exceptions.py
-# Copyright (C) 2006, 2007, 2008, 2009, 2010 Michael Bayer mike_mp@zzzcomputing.com
+# mako/exceptions.py
+# Copyright (C) 2006-2011 the Mako authors and contributors <see AUTHORS file>
 #
 # This module is part of Mako and is released under
 # the MIT License: http://www.opensource.org/licenses/mit-license.php
@@ -20,8 +20,8 @@ def _format_filepos(lineno, pos, filename):
         return " at line: %d char: %d" % (lineno, pos)
     else:
         return " in file '%s' at line: %d char: %d" % (filename, lineno, pos)
-        
-        
+ 
+ 
 class CompileException(MakoException):
     def __init__(self, message, source, lineno, pos, filename):
         MakoException.__init__(self, message + _format_filepos(lineno, pos, filename))
@@ -29,7 +29,7 @@ class CompileException(MakoException):
         self.pos = pos
         self.filename = filename
         self.source = source
-                    
+ 
 class SyntaxException(MakoException):
     def __init__(self, message, source, lineno, pos, filename):
         MakoException.__init__(self, message + _format_filepos(lineno, pos, filename))
@@ -40,70 +40,47 @@ class SyntaxException(MakoException):
 
 class UnsupportedError(MakoException):
     """raised when a retired feature is used."""
-        
+ 
 class TemplateLookupException(MakoException):
     pass
 
 class TopLevelLookupException(TemplateLookupException):
     pass
-    
+ 
 class RichTraceback(object):
-    """pulls the current exception from the sys traceback and extracts
+    """Pulls the current exception from the sys traceback and extracts
     Mako-specific template information.
-    
-    Usage:
-    
-    RichTraceback()
-    
-    Properties:
-    
-    error - the exception instance.  
-    message - the exception error message as unicode
-    source - source code of the file where the error occured.  
-        if the error occured within a compiled template,
-        this is the template source.
-    lineno - line number where the error occured.  if the error 
-        occured within a compiled template, the line number
-        is adjusted to that of the template source
-    records - a list of 8-tuples containing the original 
-        python traceback elements, plus the 
-    filename, line number, source line, and full template source 
-        for the traceline mapped back to its originating source
-        template, if any for that traceline (else the fields are None).
-    reverse_records - the list of records in reverse
-    traceback - a list of 4-tuples, in the same format as a regular 
-        python traceback, with template-corresponding 
-    traceback records replacing the originals
-    reverse_traceback - the traceback list in reverse
-    
+ 
+    See the usage examples in :ref:`handling_exceptions`.
+ 
     """
     def __init__(self, error=None, traceback=None):
         self.source, self.lineno = "", 0
 
         if error is None or traceback is None:
             t, value, tback = sys.exc_info()
-        
+ 
         if error is None:
             error = value or t
-            
+ 
         if traceback is None:
             traceback = tback
-            
+ 
         self.error = error
         self.records = self._init(traceback)
-            
+ 
         if isinstance(self.error, (CompileException, SyntaxException)):
             import mako.template
             self.source = self.error.source
             self.lineno = self.error.lineno
             self._has_source = True
-            
+ 
         self._init_message()
-    
+ 
     @property
     def errorname(self):
         return util.exception_name(self.error)
-        
+ 
     def _init_message(self):
         """Find a unicode representation of self.error"""
         try:
@@ -124,25 +101,25 @@ class RichTraceback(object):
                 yield (rec[4], rec[5], rec[2], rec[6])
             else:
                 yield tuple(rec[0:4])
-                
+ 
     @property
     def traceback(self):
         """return a list of 4-tuple traceback records (i.e. normal python
         format) with template-corresponding lines remapped to the originating
         template.
-        
+ 
         """
         return list(self._get_reformatted_records(self.records))
-    
+ 
     @property
     def reverse_records(self):
         return reversed(self.records)
-        
+ 
     @property
     def reverse_traceback(self):
         """return the same data as traceback, except in reverse order.
         """
-        
+ 
         return list(self._get_reformatted_records(self.reverse_records))
 
     def _init(self, trcback):
@@ -189,8 +166,6 @@ class RichTraceback(object):
                     match = re.match(r'\s*# SOURCE LINE (\d+)', line)
                     if match:
                         template_ln = int(match.group(1))
-                    else:
-                        template_ln += 1
                     module_ln += 1
                     line_map[module_ln] = template_ln
                 template_lines = [line for line in
@@ -227,13 +202,13 @@ class RichTraceback(object):
                     self.lineno = new_trcback[-1][1]
         return new_trcback
 
-                
+ 
 def text_error_template(lookup=None):
     """Provides a template that renders a stack trace in a similar format to
     the Python interpreter, substituting source template filenames, line
     numbers and code for that of the originating source template, as
     applicable.
-    
+ 
     """
     import mako.template
     return mako.template.Template(r"""
@@ -262,7 +237,7 @@ def html_error_template():
     template has two options. With the full option disabled, only a section of
     an HTML document is returned. with the css option disabled, the default
     stylesheet won't be included.
-    
+ 
     """
     import mako.template
     return mako.template.Template(r"""

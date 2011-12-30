@@ -1,2 +1,2 @@
 HERE=$(dirname $0)
-$HERE/../appengine/google_appengine/dev_appserver.py $HERE
+$HERE/../appengine/google_appengine/appcfg.py update $HERE

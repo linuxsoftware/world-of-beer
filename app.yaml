@@ -1,12 +1,20 @@
-application: world-of-beer2
-version: 1
-runtime: python27
-api_version: 1
-threadsafe: yes
+application:     world-of-beer2
+version:         1
+runtime:         python27
+api_version:     1
+threadsafe:      yes
 
 handlers:
-- url: /wob
-  static_dir: wob
+- url:           /new-zealand.html
+  static_files:  wob/new-zealand.html
+  upload:        wob/new-zealand.html
+
+- url:           /favicon.ico
+  static_files:  wob/favicon.ico
+  upload:        wob/favicon.ico
+
+- url:           /wob
+  static_dir:    wob
 
 - url: /.*
-  script: main.application
+  script:        worldofbeer.application

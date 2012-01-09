@@ -1,21 +1,29 @@
 <%inherit file="worldofbeer.html" />
 
+<div id="content" class="country">
 <h1>${country.name}</h1>
 
-<div>flag: ${country.flag}</div>
-<div>description: ${country.description}</div>
-<div>map: ${country.map}</div>
-<div>capital: ${country.capital}</div>
-<div>area: ${country.area}</div>
-<div>population: ${country.population}</div>
-<div>per: ${country.perCapBeer}</div>
-<div>tot: ${country.totBeer}</div>
-<div>languages: ${country.languages}</div>
-<div>climate: ${country.climate}</div>
-<div>agriculture: ${country.agriculture}</div>
-<div>industry: ${country.industry}</div>
-<div>government: ${country.government}</div>
-<div>borders: ${country.borders}</div>
+
+<div class="details">
+  <div>${form.flag.label}: <img src="${'%s/flag.png' % request.path}"  /></div>
+  ##<div>${form.flag.label} ${form.flag(path=request.path)}</div>
+  ##<div>${form.flag.label}: ${preview.image('flag')}</div>
+  <div>${form.description.label}: ${form.description.data}</div>
+  ##<div>${form.map.label}: ${form.map(path=request.path)}</div>
+  <div>${form.map.label}: <img src="${'%s/map.png' % request.path}"  /></div>
+  <div>${form.capital.label}: ${form.capital.data}</div>
+  <div>${form.area.label}: ${form.area.data}</div>
+  <div>${form.population.label}: ${form.population.data}</div>
+  <div>${form.perCapBeer.label}: ${form.perCapBeer.data}</div>
+  <div>${form.totBeer.label}: ${form.totBeer.data}</div>
+  <div>${form.languages.label}: ${form.languages.data}</div>
+  <div>${form.climate.label}: ${form.climate.data}</div>
+  <div>${form.agriculture.label}: ${form.agriculture.data}</div>
+  <div>${form.industry.label}: ${form.industry.data}</div>
+  <div>${form.government.label}: ${form.government.data}</div>
+  <div>${form.borders.label}: ${form.borders.data}</div>
+</div>
+</div>
 
 <div style="height: 120px"></div>
 

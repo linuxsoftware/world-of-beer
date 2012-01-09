@@ -1,6 +1,8 @@
 <%def name="head()">
-  <script type="text/javascript" src="/wob/ajaxupload.js"></script>
+  <script type="text/javascript" src="/wob/fileuploader.js"></script>
   <style>
+    /*
+  <link href="/wob/fileuploader.css" rel="stylesheet" type="text/css">
     span.wrap { padding: 10px; }
     span.wrap.hotness { margin-left: 30px; }
     span.wrap.old-and-busted { width: 358px; }
@@ -11,34 +13,56 @@
     div.preview { float: left; width: 100px; height: 100px; border: 2px dotted #CCCCCC; }
     div.preview.loading { background: url(/images/loading.gif) no-repeat 39px 40px; }
     div.preview.loading img {display: none; }
-/*    input#imageUpload { width: 400px; }*/
     div.highlight { margin-bottom: 20px; }
     
     span.wrap form { margin: 0; }
+    */
   </style>
 </%def>
 
-<%def name="imagePreviewField(name)">
-## from http://www.zurb.com/playground/ajax_upload
+<%def name="image(name)">
+## http://valums.com/ajax-upload/
+## http://www.zurb.com/playground/ajax_upload
+## http://ohryan.ca/blog/2011/06/28/how-to-file-upload-progress-bar-no-flash-no-php-addons
 <script type="text/javascript">
-$(document).ready(function() {
+  $(function() {
+    /*
+    $( "#progressbar" ).progressbar({
+      value: 0
+    });
+    */
+    uploader = new qq.FileUploaderBasic({
+      button: $('#uplbtn')[0],
+      action: '/preview',
+      debug: true,
+      multiple: false,
+      allowedExtensions: ['png'],
+      onComplete: function(id, fileName, response){alert('complet '+response);}
+      /*
+      onSubmit: function(id, fileName){alert('submint');},
+      onCancel: function(id, fileName){alert('cancel');},
+      */
+    });           
+  });
+
+  $(document).ready(function() {
     var thumb = $('.${name} img#thumb');  
 
     new AjaxUpload('${name}ImageUpload', {
-    action: '/preview',
-    name: 'image',
-    onSubmit: function(file, extension) {
-      $('div.preview').addClass('loading');
-    },
-    onComplete: function(file, response) {
-      thumb.load(function(){
-        $('div.preview').removeClass('loading');
-        thumb.unbind();
-      });
-      thumb.attr('src', response);
-    }
+      action: '/preview',
+      name: 'image',
+      onSubmit: function(file, extension) {
+        $('div.preview').addClass('loading');
+      },
+      onComplete: function(file, response) {
+        thumb.load(function(){
+          $('div.preview').removeClass('loading');
+          thumb.unbind();
+        });
+        thumb.attr('src', response);
+      }
+    });
   });
-});
 </script>
 
 <div class="${name}">

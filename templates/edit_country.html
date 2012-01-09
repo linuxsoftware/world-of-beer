@@ -1,4 +1,12 @@
 <%inherit file="worldofbeer.html" />
+<%namespace name="preview" file="preview.html" />
+
+<%def name="head()">
+  ${parent.head()}
+  ##  ${preview.head()}
+</%def>
+
+<div id="content" class="country">
 <h1>${country.name}</h1>
 
 %if form.errors:
@@ -11,22 +19,26 @@
     </ul>
 %endif
 
-<form method="POST" action="${url}">
-  <div>${form.name.label}: ${form.name()}</div>
-  <div>${form.flag.label}: ${form.flag}</div>
-  <div>${form.description.label}: ${form.description}</div>
-  <div>${form.map.label}: ${form.map}</div>
-  <div>${form.capital.label}: ${form.capital}</div>
-  <div>${form.area.label}: ${form.area}</div>
-  <div>${form.population.label}: ${form.population}</div>
-  <div>Beer consumed per Capita: ${form.perCapBeer}</div>
-  <div>Total beer consumption: ${form.totBeer}</div>
-  <div>${form.languages.label}: ${form.languages}</div>
-  <div>${form.climate.label}: ${form.climate}</div>
-  <div>${form.agriculture.label}: ${form.agriculture}</div>
-  <div>${form.industry.label}: ${form.industry}</div>
-  <div>${form.government.label}: ${form.government}</div>
-  <div>${form.borders.label}: ${form.borders}</div>
+<div class="details">
+<form method="POST" action="${request.path}" enctype="multipart/form-data">
+  <div>${form.name.label} ${form.name}</div>
+  ##<div>${form.flag.label} ${form.flag(path=request.path)}</div>
+  <div>${form.flag.label} ${preview.image('flag')}</div>
+  <div>${form.description.label} ${form.description}</div>
+  <div>${form.map.label} ${form.map(path=request.path)}</div>
+  <div>${form.capital.label} ${form.capital}</div>
+  <div>${form.area.label} ${form.area}</div>
+  <div>${form.population.label} ${form.population}</div>
+  <div>${form.perCapBeer.label} ${form.perCapBeer}</div>
+  <div>${form.totBeer.label} ${form.totBeer}</div>
+  <div>${form.languages.label} ${form.languages}</div>
+  <div>${form.climate.label} ${form.climate}</div>
+  <div>${form.agriculture.label} ${form.agriculture}</div>
+  <div>${form.industry.label} ${form.industry}</div>
+  <div>${form.government.label} ${form.government}</div>
+  <div>${form.borders.label} ${form.borders}</div>
   <input type="submit" value="OK"/>
 </form>
+</div>
 
+</div>

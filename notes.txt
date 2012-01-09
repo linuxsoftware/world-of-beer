@@ -242,7 +242,7 @@ Uganda
 Ukraine	
 United Arab Emirates	
 United Kingdom
-Tanzania	
+Tanzania	h
 United States
 Uruguay	
 Uzbekistan	
@@ -264,12 +264,28 @@ MarkupSafe  nose          pysqlite  WebError  WebTest
 
 
 
-valid urls (country is optional)
-beer.dazed.co.nz/new-zealand
-beer.dazed.co.nz/new-zealand/edit
-beer.dazed.co.nz/new-zealand/montieths
-beer.dazed.co.nz/new-zealand/montieths/original
-beer.dazed.co.nz/montieths
-beer.dazed.co.nz/montieths/original
-beer.dazed.co.nz/beers
-beer.dazed.co.nz/map
+valid urls
+beer.dazed.co.nz/new-zealand                      Country
+beer.dazed.co.nz/new-zealand?edit                 CountryEdit
+beer.dazed.co.nz/new-zealand/montieths            Brewery
+beer.dazed.co.nz/new-zealand/montieths/original   Beer
+beer.dazed.co.nz/montieths                        Brewery (country is optional)
+beer.dazed.co.nz/montieths/original               Beer
+beer.dazed.co.nz/new-zealand/map.jpg              Country map image
+beer.dazed.co.nz/beers                            Beers
+beer.dazed.co.nz/map                              Map
+beer.dazed.co.nz/reviewer/david                   User
+beer.dazed.co.nz/reviewer/david?edit              UserEdit
+
+beer.dazed.co.nz/admin
+beer.dazed.co.nz/preview                          Post to preview
+beer.dazed.co.nz/preview/16fd27068baf433b82eb8c7fada847da  Preview image
+
+if needed
+beer.dazed.co.nz/country#1234                     Country
+beer.dazed.co.nz/brewery#1234                     Brewery
+beer.dazed.co.nz/beer#1234                        Beer
+beer.dazed.co.nz/country/map#1234                 Map
+
+
+

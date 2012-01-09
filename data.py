@@ -78,12 +78,12 @@ class Beer(db.Model):
     description = db.TextProperty()
     brewery     = db.ReferenceProperty(Brewery)
 
-class Drinker(db.Model):
+class Reviewer(db.Model):
     name        = db.StringProperty(required=True)
     account     = db.UserProperty()
 
 class Review(db.Model):
     when        = db.DateProperty()
     beer        = db.ReferenceProperty(Brewery)
-    reviewer    = db.ReferenceProperty(Drinker)
+    reviewer    = db.ReferenceProperty(Reviewer)
 

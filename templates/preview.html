@@ -1,0 +1,57 @@
+<%def name="head()">
+  <script type="text/javascript" src="/wob/ajaxupload.js"></script>
+  <style>
+    span.wrap { padding: 10px; }
+    span.wrap.hotness { margin-left: 30px; }
+    span.wrap.old-and-busted { width: 358px; }
+    
+    span.wrap button { display: block; margin-top: 10px; }
+    
+    span.wrap label { margin-bottom: 5px; }
+    div.preview { float: left; width: 100px; height: 100px; border: 2px dotted #CCCCCC; }
+    div.preview.loading { background: url(/images/loading.gif) no-repeat 39px 40px; }
+    div.preview.loading img {display: none; }
+/*    input#imageUpload { width: 400px; }*/
+    div.highlight { margin-bottom: 20px; }
+    
+    span.wrap form { margin: 0; }
+  </style>
+</%def>
+
+<%def name="imagePreviewField(name)">
+## from http://www.zurb.com/playground/ajax_upload
+<script type="text/javascript">
+$(document).ready(function() {
+    var thumb = $('.${name} img#thumb');  
+
+    new AjaxUpload('${name}ImageUpload', {
+    action: '/preview',
+    name: 'image',
+    onSubmit: function(file, extension) {
+      $('div.preview').addClass('loading');
+    },
+    onComplete: function(file, response) {
+      thumb.load(function(){
+        $('div.preview').removeClass('loading');
+        thumb.unbind();
+      });
+      thumb.attr('src', response);
+    }
+  });
+});
+</script>
+
+<div class="${name}">
+  <div class="preview">
+    <img id="thumb" width="100px" height="100px" src="/wob/sunflowers.png" />
+  </div>
+
+  <span class="wrap hotness">
+    <label>Upload ${name}</label>
+    <input type="file" id="${name}ImageUpload" size="20" />
+  </span>
+</div>
+
+</%def>
+
+

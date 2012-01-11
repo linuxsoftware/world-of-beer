@@ -32,6 +32,7 @@ class ImageWidget(object):
                                                                 **kwargs))
         return preview + inputButton
 
+
 class ImageField(Field):
     widget = ImageWidget()
 
@@ -49,10 +50,10 @@ class ImageField(Field):
     def _value(self):
         return self.name + ".png"
     
+
 class ImagePreviewWidget(object):
     """
-    Super dynamic image selection widget
-    implemented as a Mako template
+    Super dynamic image selection widget, implemented as a Mako template
     """
     def __call__(self, field, **kwargs):
         kwargs.setdefault("path", "")
@@ -60,6 +61,7 @@ class ImagePreviewWidget(object):
                                           "templates",
                                           "preview.html"))
         return template.get_def("image").render(field=field, **kwargs)
+
 
 class ImagePreviewField(ImageField):
     widget = ImagePreviewWidget()
@@ -113,6 +115,7 @@ class ImagePreviewField(ImageField):
             return []
         return [ image ]
 
+
 class WobForm(Form):
     """WobForm allows me to extend the wtforms.Form"""
     # I'm sure there's more clever ways to do this, but this works
@@ -120,6 +123,7 @@ class WobForm(Form):
     def hasImageField(cls, name):
         fieldClass = getattr(getattr(cls, name, object), 'field_class', None)
         return issubclass(fieldClass, ImageField)
+
 
 ModelCountryForm = model_form(Country, WobForm,
                               field_args = 
@@ -131,9 +135,11 @@ class CountryForm(ModelCountryForm):
     flag = ImagePreviewField(**ModelCountryForm.flag.kwargs)
     map  = ImagePreviewField(**ModelCountryForm.map.kwargs)
 
+
 ModelBreweryForm = model_form(Brewery, WobForm)
 class BreweryForm(ModelBreweryForm):
     logo = ImagePreviewField(**ModelBreweryForm.logo.kwargs)
+
 
 ModelBeerForm = model_form(Beer, WobForm)
 class BeerForm(ModelBeerForm):

@@ -40,6 +40,7 @@ class WorldOfBeer(object):
 # access WorldOfBeer data through this object
 world = WorldOfBeer()
 
+
 class Country(db.Model):
     name        = db.StringProperty(required=True)
     flag        = db.BlobProperty()
@@ -61,10 +62,12 @@ class Country(db.Model):
     #borders     = db.StringListProperty()
     borders     = db.StringProperty()
 
+
 class BeerRequest(db.Model):
     code        = db.StringProperty(required=True)
     name        = db.StringProperty(required=True)
     locRequest  = db.StringProperty(required=True)
+
 
 class Brewery(db.Model):
     name        = db.StringProperty(required=True)
@@ -72,15 +75,18 @@ class Brewery(db.Model):
     description = db.TextProperty()
     country     = db.ReferenceProperty(Country)
 
+
 class Beer(db.Model):
     name        = db.StringProperty(required=True)
     picture     = db.BlobProperty()
     description = db.TextProperty()
     brewery     = db.ReferenceProperty(Brewery)
 
+
 class Reviewer(db.Model):
     name        = db.StringProperty(required=True)
     account     = db.UserProperty()
+
 
 class Review(db.Model):
     when        = db.DateProperty()

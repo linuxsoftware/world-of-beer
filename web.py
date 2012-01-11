@@ -30,11 +30,14 @@ def renderTemplate(request, templateName, **data):
         request.response.status = 500
         write(exceptions.html_error_template().render())
 
+
 def getMap(request):
     renderTemplate(request, "map.html")
 
+
 def getBeers(request):
     renderTemplate(request, "beers.html")
+
 
 def postImagePreview(request):
     if request.method != "POST":
@@ -49,13 +52,13 @@ def postImagePreview(request):
     else:
         image = ""
         raise RuntimeError("TODO")
-
-    timeout = 3600 # 1 hour
     if len(image) < memcache.MAX_VALUE_SIZE:
         # TODO check size in validation
+        timeout = 3600 # 1 hour
         memcache.set(previewId, image, timeout, namespace="ImagePreview")
     request.response.headers['Content-Type'] = "text/plain"
     request.response.out.write("{previewId: '%s'}" % previewId)
+
 
 def getImagePreview(request):
     if request.method != "GET":
@@ -72,12 +75,55 @@ def getImagePreview(request):
         headers['Content-Type']   = "image/png"
         request.response.out.write(image)
 
-class BaseHandler(RequestHandler):
-    # TODO refactor getImage and err404 to funcs?
 
-    def err404(self, msg):
-        self.error(404)
-        self.response.out.write(msg)
+class WobHandler(RequestHandler):
+    """This is a generic WoB request handler"""
+    Form = None
+    view = None
+    edit = None
+    
+    def __init__(self, request, response, wobObj=None):
+        RequestHandler.__init__(self, request, response)
+        self.wobObj = wobObj
+
+    def dispatch(self):
+        # memories of bobo traverse
+        name = self.request.path_info_pop()
+        if name:
+            if name.endswith('.png') and self.Form.hasImageField(name[:-4]):
+                return self.getImage(self.wobObj, name[:-4])
+            else:
+                return self.traverseTo(name)
+
+        return RequestHandler.dispatch(self)
+
+    def get(self):
+        if self.request.query_string == "edit":
+            form = self.Form(obj=self.wobObj)
+            template = "edit_%s.html" % self.name
+        else:
+            form = self.Form()
+            template = "%s.html" % self.name
+        kwargs = { "form":    form,
+                   self.name: self.wobObj }
+        renderTemplate(self.request, template, **kwargs)
+
+    def post(self):
+        form = self.Form(self.request.POST, self.wobObj)
+        if form.validate():
+            self.error = "something"
+            return self.get()
+        form.populate_obj(self.wobObj)
+        self.wobObj.put()
+        return self.redirect(self.request.path)
+
+    def getImage(self, wobObj, field):
+        if self.request.method != "GET":
+            raise exc.HTTPMethodNotAllowed()
+        image = getattr(wobObj, field, "")
+        self.response.headers['Content-Type'] = "image/png"
+        self.response.out.write(image)
+        return None
 
     def _findBrewery(self, name):
         # TODO
@@ -88,20 +134,14 @@ class BaseHandler(RequestHandler):
         # TODO
         return None
 
-    def getImage(self, wobObj, field):
-        if self.request.method != "GET":
-            raise exc.HTTPMethodNotAllowed()
-        image = getattr(wobObj, field, "")
-        self.response.headers['Content-Type'] = "image/png"
-        self.response.out.write(image)
-        return None
+    def err404(self, msg):
+        self.error(404)
+        self.response.out.write(msg)
 
 
-class MainHandler(BaseHandler):
-    """This is the main request handler for WoB"""
-
+class MainHandler(WobHandler):
     def __init__(self, request, response):
-        BaseHandler.__init__(self, request, response)
+        WobHandler.__init__(self, request, response)
 
     def dispatch(self):
         name = self.request.path_info_pop()
@@ -126,134 +166,37 @@ class MainHandler(BaseHandler):
         return None
 
 
-class CountryHandler(BaseHandler):
-    """This is the request handler for a Country"""
+class CountryHandler(WobHandler):
+    Form = CountryForm
+    name = "country"
     
-    def __init__(self, request, response, country):
-        BaseHandler.__init__(self, request, response)
-        self.country = country
-
-    def dispatch(self):
-        # memories of bobo traverse
-        # TODO ideally I'd like to refactor out all this common code
-        name = self.request.path_info_pop()
-        if name:
-            if name.endswith('.png') and CountryForm.hasImageField(name[:-4]):
-                return self.getImage(self.country, name[:-4])
-            else:
-                brewery = self._findBrewery(name)
-                if brewery:
-                    handler = BreweryHandler(self.request, self.response, brewery)
-                    return handler.dispatch()
-                self.err404("Cannot find brewery '%s'" % name)
-                return None
-
-        return BaseHandler.dispatch(self)
-
-    def get(self):
-        form = CountryForm(obj=self.country)
-        if self.request.query_string == "edit":
-            template = "edit_country.html"
-        else:
-            template = "country.html"
-        renderTemplate(self.request, template,
-                       form    = form,
-                       country = self.country)
-
-    def post(self):
-        form = CountryForm(self.request.POST, self.country)
-        if form.validate():
-            self.error = "something"
-            return self.get()
-
-        form.populate_obj(self.country)
-        self.country.put()
-        return self.redirect(self.request.path)
+    def traverseTo(self, name):
+        brewery = self._findBrewery(name)
+        if brewery:
+            handler = BreweryHandler(self.request, self.response, brewery)
+            return handler.dispatch()
+        self.err404("Cannot find brewery '%s'" % name)
+        return None
 
 
-class BreweryHandler(BaseHandler):
-    """This is the request handler for a Brewery"""
+class BreweryHandler(WobHandler):
+    Form = BreweryForm
+    name = "brewery"
 
-    def __init__(self, request, response, brewery):
-        BaseHandler.__init__(self, request, response)
-        self.brewery = brewery
-
-    def dispatch(self):
-        # chaining my request handlers together to make them more zopeish
-        name = self.request.path_info_pop()
-        if name:
-            if name.endswith('.png') and BreweryForm.hasImageField(name[:-4]):
-                return self.getImage(self.brewery, name[:-4])
-            else:
-                beer = self._findBeer(name)
-                if beer:
-                    handler = BeerHandler(self.request, self.response, beer)
-                    return handler.dispatch()
-                self.err404("Cannot find beer '%s'" % name)
-                return None
-
-        return BaseHandler.dispatch(self)
-
-    def get(self):
-        form = None
-        if self.request.query_string == "edit":
-            template = "edit_brewery.html"
-            form = BreweryForm(obj=self.brewery)
-        else:
-            template = "brewery.html"
-
-        renderTemplate(self.request, template,
-                       form    = form,
-                       brewery = self.brewery)
-
-    def post(self):
-        form = BreweryForm(self.request.POST, self.brewery)
-        if form.validate():
-            self.error = "something"
-            self.get()
-
-        form.populate_obj(self.brewery)
-        self.brewery.put()
-        return self.redirect(self.request.path)
+    def traverseTo(self, name):
+        beer = self._findBeer(name)
+        if beer:
+            handler = BeerHandler(self.request, self.response, beer)
+            return handler.dispatch()
+        self.err404("Cannot find beer '%s'" % name)
+        return None
 
 
-class BeerHandler(BaseHandler):
-    """This is the request handler for a Beer"""
+class BeerHandler(WobHandler):
+    Form = BeerForm
+    name = "beer"
 
-    def __init__(self, request, response, beer):
-        BaseHandler.__init__(self, request, response)
-        self.beer = beer
+    def traverseTo(self, name):
+        self.err404("'%s' unknown" % name)
+        return None
 
-    def dispatch(self):
-        # chaining my request handlers together to make them more zopeish
-        name = self.request.path_info_pop()
-        if name:
-            if name.endswith('.png') and BeerForm.hasImageField(name[:-4]):
-                return self.getImage(self.beer, name[:-4])
-            else:
-                self.err404("'%s' unknown" % name)
-                return None
-
-        return BaseHandler.dispatch(self)
-
-    def get(self):
-        form = None
-        if self.request.query_string == "edit":
-            template = "edit_beer.html"
-            form = BeerForm(obj=self.beer)
-        else:
-            template = "beer.html"
-
-        renderTemplate(self.request, template,
-                       form = form,
-                       beer = self.beer)
-
-    def post(self):
-        form = BeerForm(self.request.POST, self.country)
-        if form.validate():
-            self.error = "something"
-            self.get()
-
-        form.populate_obj(self.beer)
-        self.beer.put()
-        return self.redirect(self.request.path)

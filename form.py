@@ -35,9 +35,8 @@ class ImageField(Field):
     def process_formdata(self, valuelist):
         if valuelist and isinstance(valuelist[0], FieldStorage):
             self.data = db.Blob(valuelist[0].value)
-        #else:
-        #    self.data = db.Blob('')
-        # NB If we reset on no data then a flag must always be rechosen
+        # NB If we reset on no data then a image must always be rechosen
+        # so we don't do that
 
     def _value(self):
         return self.name + ".png"

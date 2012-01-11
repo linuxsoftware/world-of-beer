@@ -3,7 +3,7 @@
 
 <%def name="head()">
   ${parent.head()}
-  ##  ${preview.head()}
+  ${preview.head()}
 </%def>
 
 <div id="content" class="country">
@@ -19,13 +19,12 @@
     </ul>
 %endif
 
-<div class="details">
-<form method="POST" action="${request.path}" enctype="multipart/form-data">
+<form class="details" method="POST" action="${request.path}" enctype="multipart/form-data">
   <div>${form.name.label} ${form.name}</div>
-  ##<div>${form.flag.label} ${form.flag(path=request.path)}</div>
-  <div>${form.flag.label} ${preview.image('flag')}</div>
+  ##<div>${form.flag.label} ${form.flag}</div>
+  <div>${form.flag.label} ${preview.image(form.flag, 136, 80)}</div>
   <div>${form.description.label} ${form.description}</div>
-  <div>${form.map.label} ${form.map(path=request.path)}</div>
+  <div>${form.map.label} ${preview.image(form.map, 200, 200)}</div>
   <div>${form.capital.label} ${form.capital}</div>
   <div>${form.area.label} ${form.area}</div>
   <div>${form.population.label} ${form.population}</div>
@@ -39,6 +38,5 @@
   <div>${form.borders.label} ${form.borders}</div>
   <input type="submit" value="OK"/>
 </form>
-</div>
 
 </div>

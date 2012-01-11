@@ -307,7 +307,10 @@ qq.FileUploaderBasic.prototype = {
             multiple: this._options.multiple && qq.UploadHandlerXhr.isSupported(),
             onChange: function(input){
                 self._onInputChange(input);
-            }        
+            },
+            // WoB changes here
+            name: this._options.name,
+            id:   this._options.id
         });           
     },    
     _createUploadHandler: function(){
@@ -375,7 +378,8 @@ qq.FileUploaderBasic.prototype = {
                 this._uploadFile(input);                                    
             }                      
         }               
-        this._button.reset();   
+        // WoB change here
+        //this._button.reset();   
     },  
     _uploadFileList: function(files){
         for (var i=0; i<files.length; i++){
@@ -801,6 +805,10 @@ qq.UploadButton.prototype = {
                 
         input.setAttribute("type", "file");
         input.setAttribute("name", this._options.name);
+        // WoB changes here
+        if (this._options.id) {
+            input.setAttribute("id", this._options.id);
+        }
         
         qq.css(input, {
             position: 'absolute',
@@ -811,7 +819,9 @@ qq.UploadButton.prototype = {
             top: 0,
             fontFamily: 'Arial',
             // 4 persons reported this, the max values that worked for them were 243, 236, 236, 118
-            fontSize: '118px',
+            //fontSize: '118px',
+            fontSize: '236px',
+            //fontSize: '10px',
             margin: 0,
             padding: 0,
             cursor: 'pointer',

@@ -10,7 +10,7 @@
 <script type="text/javascript">
   <% name = field.name %>
   $(function() {
-    var button = $('#${name}Button');	
+    var button = $('#${name}Button');
     var thumb  = $('#${name}Button img.thumb');	
     var uploader = new qq.FileUploaderBasic({
       button:   $('#${name}Button')[0],
@@ -48,10 +48,10 @@
       },
       onDrop: function(e){
         button.removeClass('qq-upload-drop-area-active');
-        uploader._uploadFile(e.dataTransfer.files[0]);    
+        uploader._uploadFile(e.dataTransfer.files[0]);
       }
     });
-  });           
+  });
 </script>
 <div id="${name}Button" class="qq-upload-button"
      style="width: ${width}px; height: ${height}px;">
@@ -62,4 +62,7 @@
   %endif
 </div>
 <input id="${name}Preview" name="${name}Preview" type="hidden" />
+<noscript>
+  <input id="${name}" name="${name}" type="file" class="oldSchool" />
+</noscript>
 </%def>

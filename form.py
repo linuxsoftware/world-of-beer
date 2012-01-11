@@ -31,18 +31,6 @@ class ImageWidget(object):
                                                                 type=u"file",
                                                                 **kwargs))
         return preview + inputButton
-    
-class ImagePreviewWidget(object):
-    """
-    Super dynamic image selection widget
-    implemented as a Mako template
-    """
-    def __call__(self, field, **kwargs):
-        kwargs.setdefault("path", "")
-        template = Template(filename=join(dirname(__file__), 
-                                          "templates",
-                                          "preview.html"))
-        return template.get_def("image").render(field=field, **kwargs)
 
 class ImageField(Field):
     widget = ImageWidget()
@@ -60,6 +48,18 @@ class ImageField(Field):
 
     def _value(self):
         return self.name + ".png"
+    
+class ImagePreviewWidget(object):
+    """
+    Super dynamic image selection widget
+    implemented as a Mako template
+    """
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault("path", "")
+        template = Template(filename=join(dirname(__file__), 
+                                          "templates",
+                                          "preview.html"))
+        return template.get_def("image").render(field=field, **kwargs)
 
 class ImagePreviewField(ImageField):
     widget = ImagePreviewWidget()
@@ -93,7 +93,7 @@ class ImagePreviewField(ImageField):
         if not self.name in formdata:
             return []
         rawData = formdata.getlist(self.name)
-        if rawData and rawData[0]:
+        if rawData and rawData[0] != u'':
             return rawData
         return self._getRawPreviewData(formdata)
 

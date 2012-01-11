@@ -81,6 +81,9 @@ input[type="text"] {
     -moz-border-radius: 4px;
     border-radius: 4px;
     padding: 6px 8px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
 }
 textarea:focus,
 input:focus,
@@ -97,7 +100,8 @@ input:focus,
     border: 1px dotted transparent;
 }
 .qq-upload-drop-area-active img,
-.qq-upload-button-hover img {
+.qq-upload-button-hover img,
+.qq-upload-button:hover img {
     border: 1px dotted #555;
 }
 .qq-upload-button.loading { 
@@ -105,6 +109,10 @@ input:focus,
 }
 .qq-upload-button.loading img { 
     display: none; 
+}
+input[type="file"].oldSchool { 
+    margin: 8px 12px;
+    vertical-align: bottom;
 }
 
 body {

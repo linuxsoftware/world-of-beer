@@ -54,9 +54,8 @@ def postImagePreview(request):
     if len(image) < memcache.MAX_VALUE_SIZE:
         # TODO check size in validation
         memcache.set(previewId, image, timeout, namespace="ImagePreview")
-    uniqPreviewId = "/%d%s" % (int(time.time()), previewId)
     request.response.headers['Content-Type'] = "text/plain"
-    request.response.out.write("{previewId: '%s'}" % uniqPreviewId)
+    request.response.out.write("{previewId: '%s'}" % previewId)
 
 def getImagePreview(request):
     if request.method != "GET":

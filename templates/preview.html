@@ -29,9 +29,11 @@
           button.removeClass('loading qq-upload-button-hover qq-upload-button-focus');
           thumb.unbind();
         });
-        var previewId = response['previewId']
+        var previewId = response['previewId'];
+        var now = new Date();
+        var secsSinceEpoch = Math.floor(now.getTime()/1000);
         $('#${name}Preview').val(previewId);
-        thumb.attr('src', '/preview'+previewId);
+        thumb.attr('src', '/preview/'+secsSinceEpoch+previewId);
       }
     });
     var dz = new qq.UploadDropZone({

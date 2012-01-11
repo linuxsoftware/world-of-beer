@@ -7,7 +7,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 routes = [(r'/$|/map$',           web.getMap),
           (r'/beers$',            web.getBeers),
           (r'/preview$',          web.postImagePreview),
-          (r'/preview/[\da-f]+$', web.getImagePreview),
+          (r'/preview/.+$',       web.getImagePreview),
           (r'/.+',                web.MainHandler),]
 application = WSGIApplication(routes, debug=True)
 

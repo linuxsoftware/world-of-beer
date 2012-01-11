@@ -5,7 +5,7 @@ from os.path import join, dirname
 import time
 import uuid
 
-from google.appengine.api import users, memcache
+from google.appengine.api import memcache
 from webapp2 import RequestHandler
 from mako.lookup import Template, TemplateLookup
 from mako import exceptions
@@ -43,25 +43,28 @@ def postImagePreview(request):
     #TODO validation use ImageField?
     if request.get("qqfile"):
         image = request.body
+        previewId = request.get('previewId')
     elif request.POST.get('qqfile'):
         image = request.POST.get("qqfile").value
+        previewId = request.POST.get('previewId')
     else:
         image = ""
         raise RuntimeError("TODO")
 
-    previewId = uuid.uuid4().hex
-    timeout = 60 #seconds
+    if not previewId:
+        previewId = "/%s.png" % uuid.uuid4().hex
+    timeout = 3600 # 1 hour
     if len(image) < memcache.MAX_VALUE_SIZE:
         # TODO check size in validation
         memcache.set(previewId, image, timeout, namespace="ImagePreview")
     request.response.headers['Content-Type'] = "text/plain"
-    request.response.out.write("{url: '/preview/%s'}" % previewId)
+    request.response.out.write("{previewId: '%s'}" % previewId)
 
 def getImagePreview(request):
     if request.method != "GET":
         raise exc.HTTPMethodNotAllowed()
     request.path_info_pop() #/preview/
-    previewId = request.path_info_pop()
+    previewId = request.path_info
     image = memcache.get(previewId, namespace="ImagePreview")
     if image:
         #TODO validation use ImageField?
@@ -163,12 +166,6 @@ class CountryHandler(BaseHandler):
             return self.get()
 
         form.populate_obj(self.country)
-        # just playing
-        #if form.flag.data != u"":
-        #    self.country.flag = form.flag.data.value
-            #self.country.flag = db.Blob(form.flag.data.value)
-            #country.flag = db.Blob(self.request.POST[form.flag.name].read())
-
         self.country.put()
         return self.redirect(self.request.path)
 

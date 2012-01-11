@@ -378,8 +378,7 @@ qq.FileUploaderBasic.prototype = {
                 this._uploadFile(input);                                    
             }                      
         }               
-        // WoB change here
-        //this._button.reset();   
+        this._button.reset();   
     },  
     _uploadFileList: function(files){
         for (var i=0; i<files.length; i++){

@@ -22,9 +22,9 @@
 <form class="details" method="POST" action="${request.path}" enctype="multipart/form-data">
   <div>${form.name.label} ${form.name}</div>
   ##<div>${form.flag.label} ${form.flag}</div>
-  <div>${form.flag.label} ${preview.image(form.flag, 136, 80)}</div>
+  <div>${form.flag.label} ${form.flag(path=request.path, width=136, height=80)}</div>
   <div>${form.description.label} ${form.description}</div>
-  <div>${form.map.label} ${preview.image(form.map, 200, 200)}</div>
+  <div>${form.map.label} ${form.map(path=request.path, width=200, height=200)}</div>
   <div>${form.capital.label} ${form.capital}</div>
   <div>${form.area.label} ${form.area}</div>
   <div>${form.population.label} ${form.population}</div>

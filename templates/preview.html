@@ -6,16 +6,17 @@
   <script type="text/javascript" src="/wob/fileuploader.js"></script>
 </%def>
 
-<%def name="image(field, width=100, height=100)">
+<%def name="image(field, path, width=100, height=100)">
 <script type="text/javascript">
   <% name = field.name %>
   $(function() {
     var button = $('#${name}Button');	
-    var thumb = $('#${name}Button img.thumb');	
-    new qq.FileUploaderBasic({
+    var thumb  = $('#${name}Button img.thumb');	
+    var uploader = new qq.FileUploaderBasic({
       button:   $('#${name}Button')[0],
       id:       '${name}',
       name:     '${name}',
+      params:   { 'previewId': '${path}/${name}.png' },
       action:   '/preview',
       debug:    false,
       multiple: false,
@@ -28,7 +29,26 @@
           button.removeClass('loading qq-upload-button-hover qq-upload-button-focus');
           thumb.unbind();
         });
-        thumb.attr('src', response['url']);
+        var previewId = response['previewId']
+        $('#${name}Preview').val(previewId);
+        thumb.attr('src', '/preview'+previewId);
+      }
+    });
+    var dz = new qq.UploadDropZone({
+      element: button[0],
+      onEnter: function(e){
+        button.addClass('qq-upload-drop-area-active');
+        e.stopPropagation();
+      },
+      onLeave: function(e){
+        e.stopPropagation();
+      },
+      onLeaveNotDescendants: function(e){
+        button.removeClass('qq-upload-drop-area-active');
+      },
+      onDrop: function(e){
+        button.removeClass('qq-upload-drop-area-active');
+        uploader._uploadFile(e.dataTransfer.files[0]);    
       }
     });
   });           
@@ -36,11 +56,10 @@
 <div id="${name}Button" class="qq-upload-button"
      style="width: ${width}px; height: ${height}px;">
   %if field.data:
-    <img class="thumb" src="${request.path}/${name}.png" />
+    <img class="thumb" src="${path}/${name}.png" />
   %else:
     <img class="thumb" src="/wob/empty-${name}.png" />
   %endif
-  <div class="qq-upload-drop-area"></div>
 </div>
-
+<input id="${name}Preview" name="${name}Preview" type="hidden" />
 </%def>

@@ -96,6 +96,7 @@ input:focus,
 .qq-upload-button img {
     border: 1px dotted transparent;
 }
+.qq-upload-drop-area-active img,
 .qq-upload-button-hover img {
     border: 1px dotted #555;
 }

@@ -3,7 +3,6 @@ import sys
 import os
 from os.path import join, dirname
 import time
-import uuid
 
 from google.appengine.api import memcache
 from webapp2 import RequestHandler
@@ -51,24 +50,27 @@ def postImagePreview(request):
         image = ""
         raise RuntimeError("TODO")
 
-    if not previewId:
-        previewId = "/%s.png" % uuid.uuid4().hex
     timeout = 3600 # 1 hour
     if len(image) < memcache.MAX_VALUE_SIZE:
         # TODO check size in validation
         memcache.set(previewId, image, timeout, namespace="ImagePreview")
+    uniqPreviewId = "/%d%s" % (int(time.time()), previewId)
     request.response.headers['Content-Type'] = "text/plain"
-    request.response.out.write("{previewId: '%s'}" % previewId)
+    request.response.out.write("{previewId: '%s'}" % uniqPreviewId)
 
 def getImagePreview(request):
     if request.method != "GET":
         raise exc.HTTPMethodNotAllowed()
-    request.path_info_pop() #/preview/
+    request.path_info_pop() #/preview
+    request.path_info_pop() #/time
     previewId = request.path_info
     image = memcache.get(previewId, namespace="ImagePreview")
     if image:
         #TODO validation use ImageField?
-        request.response.headers['Content-Type'] = "image/png"
+        headers = request.response.headers
+        headers["Expires"]        = "Sat, 26 Jul 1997 05:00:00 GMT"
+        headers["Cache-Control"]  = "no-store, no-cache, must-revalidate"
+        headers['Content-Type']   = "image/png"
         request.response.out.write(image)
 
 class BaseHandler(RequestHandler):
